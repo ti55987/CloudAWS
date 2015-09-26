@@ -1,0 +1,24 @@
+ec2-54-84-144-241.compute-1.amazonaws.com
+------------------------------
+pratice:
+bin/hadoop jar hadoop-examples.jar pi 8 10000
+bin/hadoop jar hadoop-examples.jar randomwriter /wordcount/input
+
+bin/hadoop jar wordcount.jar WordCount /wordcount/input /wordcount/output
+------------------------------
+
+hadoop dfs -mkdir /mnt/proj
+hadoop dfs -put gutenberg-txt.tgz /mnt/proj
+
+mkdir wordcount_classes
+javac -classpath ${HADOOP_HOME}/hadoop-core.jar -d wordcount_classes LineIndexer.java 
+/usr/lib/jvm/*/bin/jar -cvf lineIndexer.jar -C wordcount_classes/ .
+
+bin/hadoop jar lineIndexer.jar LineIndexer /mnt/proj/gutenberg-txt /mnt/output
+
+-------for Bonus--------------
+mkdir wordcount_c
+javac -classpath ${HADOOP_HOME}/hadoop-core.jar -d wordcount_c Bonus.java 
+/usr/lib/jvm/*/bin/jar -cvf bonus.jar -C wordcount_classes/ .
+
+bin/hadoop jar bonus.jar Bonus /mnt/proj/gutenberg-txt /mnt/output_b

@@ -1,0 +1,12 @@
+mkdir ngram_classes
+javac -classpath ${HADOOP_HOME}/hadoop-core.jar -d ngram_classes NGram.java
+/usr/lib/jvm/*/bin/jar -cvf ngram.jar -C ngram_classes/ .
+
+
+hadoop distcp s3://15-319-s13/book-dataset/ /mnt/dataset/
+
+bin/hadoop jar ngram.jar NGram /mnt/dataset/ /mnt/output1
+
+hadoop dfs -get /mnt/output1/ /mnt
+
+grep ^early /mnt/output1/part-r-00000 > count.txt
